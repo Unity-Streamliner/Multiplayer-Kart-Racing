@@ -7,6 +7,7 @@ public class Drive : MonoBehaviour
     public List<WheelCollider> WheelColliders;
     public float torque = 200;
     public float maxSteerAngle = 30;
+    public float maxBrakeTorque = 500;
     public GameObject[] Wheels;
     // Start is called before the first frame update
     void Start()
@@ -19,20 +20,23 @@ public class Drive : MonoBehaviour
     {
         float a = Input.GetAxis("Vertical");
         float s = Input.GetAxis("Horizontal");
-        Go(a, s);
+        float b = Input.GetAxis("Jump");
+        Go(a, s, b);
     }
 
-    void Go(float accel, float steer) 
+    void Go(float accel, float steer, float brake) 
     {
         accel = Mathf.Clamp(accel, -1, 1);
         steer = Mathf.Clamp(steer, -1, 1) * maxSteerAngle;
+        brake = Mathf.Clamp(brake, -1, 1) * maxBrakeTorque;
         float thrustTorque = accel * torque;
         for (int i = 0; i < 4; i++) 
         {
             WheelColliders[i].motorTorque = thrustTorque;
             if (i == 0 || i == 3)
                 WheelColliders[i].steerAngle = steer;
-
+            else 
+                WheelColliders[i].brakeTorque = brake;
             Quaternion quaternion;
             Vector3 position;
 
