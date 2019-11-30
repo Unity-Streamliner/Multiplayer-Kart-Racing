@@ -10,8 +10,23 @@ public class Drive : MonoBehaviour
     public float maxBrakeTorque = 500;
     public GameObject[] Wheels;
     public AudioSource skidSound;
+    public AudioSource highAccel;
     public Transform SkidTrailPrefab;
     public ParticleSystem smokePrefab;
+
+    public GameObject brakeLight;
+    public Rigidbody rb;
+    public float gearLength = 3;
+    public float currentSpeed {
+        get { return rb.velocity.magnitude * gearLength; }
+    }
+    public float lowPitch = 1f;
+    public float highPitch = 6f;
+    public int numGears = 5;
+    float rpm;
+    int currentGear = 1;
+    float currentGearPercentage;
+    public float maxSpeed = 200;
 
     Transform[] skidTrails = new Transform[4];
     ParticleSystem[] skidSmoke = new ParticleSystem[4];
@@ -46,6 +61,32 @@ public class Drive : MonoBehaviour
             skidSmoke[i] = Instantiate(smokePrefab);
             skidSmoke[i].Stop();
         }
+        brakeLight.SetActive(false);
+    }
+
+    void CalculateEngineSound()
+    {
+        float gearPercentage = 1 / (float) numGears;
+        float targetGearFactor = Mathf.InverseLerp(gearPercentage * currentGear, gearPercentage * (currentGear + 1), Mathf.Abs(currentSpeed/maxSpeed));
+        currentGearPercentage = Mathf.Lerp(currentGearPercentage, targetGearFactor, Time.deltaTime * 5f);
+
+        var gearNumFactor = currentGear / (float) numGears;
+        rpm = Mathf.Lerp(gearNumFactor, 1, currentGearPercentage);
+
+        float speedPercentage = Mathf.Abs(currentSpeed / maxSpeed);
+        float upperGearMax = (1 / (float) numGears) * (currentGear + 1);
+        float downGearMax = (1 / (float) numGears) * currentGear;
+
+        if (currentGear > 0 && speedPercentage < downGearMax)
+        {
+            currentGear--;
+        } 
+        if (speedPercentage > upperGearMax && currentGear < numGears - 1)
+        {
+            currentGear++;
+        }
+        float pitch = Mathf.Lerp(lowPitch, highPitch, rpm);
+        highAccel.pitch = Mathf.Min(highPitch, pitch) * 0.25f;
     }
 
     // Update is called once per frame
@@ -57,6 +98,8 @@ public class Drive : MonoBehaviour
         Go(a, s, b);
 
         CheckForSkid();
+
+        CalculateEngineSound();
     }
 
     void Go(float accel, float steer, float brake) 
@@ -64,7 +107,13 @@ public class Drive : MonoBehaviour
         accel = Mathf.Clamp(accel, -1, 1);
         steer = Mathf.Clamp(steer, -1, 1) * maxSteerAngle;
         brake = Mathf.Clamp(brake, -1, 1) * maxBrakeTorque;
-        float thrustTorque = accel * torque;
+        if (brake != 0) brakeLight.SetActive(true);
+        else brakeLight.SetActive(false);
+        float thrustTorque = 0;
+        if (thrustTorque < maxSpeed)
+        {
+            thrustTorque = accel * torque;
+        } 
         for (int i = 0; i < 4; i++) 
         {
             WheelColliders[i].motorTorque = thrustTorque;
