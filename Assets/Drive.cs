@@ -11,7 +11,12 @@ public class Drive : MonoBehaviour
     public GameObject[] Wheels;
     public AudioSource skidSound;
     public Transform SkidTrailPrefab;
+    public ParticleSystem smokePrefab;
+
     Transform[] skidTrails = new Transform[4];
+    ParticleSystem[] skidSmoke = new ParticleSystem[4];
+
+    
 
     public void StartSkidTrail(int i)
     {
@@ -36,7 +41,11 @@ public class Drive : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        for (int i = 0; i < 4; i++)
+        {
+            skidSmoke[i] = Instantiate(smokePrefab);
+            skidSmoke[i].Stop();
+        }
     }
 
     // Update is called once per frame
@@ -86,8 +95,11 @@ public class Drive : MonoBehaviour
                 {
                     skidSound.Play();
                 }
+                skidSmoke[i].transform.position = WheelColliders[i].transform.position - WheelColliders[i].transform.up * WheelColliders[i].radius;
+                skidSmoke[i].Emit(1);
                 //StartSkidTrail(i);
             } else {
+                skidSmoke[i].Stop();
                 //EndSkidTrail(i); 
             }
         }

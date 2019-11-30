@@ -608,17 +608,17 @@ PrefabInstance:
     - target: {fileID: 3375566827531199483, guid: 78600ba47c0e34aeba3cb6aa542e93ba,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.39121437
+      value: 0.87
       objectReference: {fileID: 0}
     - target: {fileID: 3375566827531199483, guid: 78600ba47c0e34aeba3cb6aa542e93ba,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.4134302
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3375566827531199483, guid: 78600ba47c0e34aeba3cb6aa542e93ba,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -4.4871364
+      value: -4.7
       objectReference: {fileID: 0}
     - target: {fileID: 3375566827531199483, guid: 78600ba47c0e34aeba3cb6aa542e93ba,
         type: 3}
@@ -670,6 +670,12 @@ PrefabInstance:
       propertyPath: SkidTrailPrefab
       value: 
       objectReference: {fileID: 4413320810393246461, guid: 6cd8b976baee64b2b898a3d1a5a68ecf,
+        type: 3}
+    - target: {fileID: 3375566827531199482, guid: 78600ba47c0e34aeba3cb6aa542e93ba,
+        type: 3}
+      propertyPath: smokePrefab
+      value: 
+      objectReference: {fileID: 924298932794659767, guid: d55b57e7336ba4af6a8e70a272a803a2,
         type: 3}
     - target: {fileID: 3375566827419525859, guid: 78600ba47c0e34aeba3cb6aa542e93ba,
         type: 3}
