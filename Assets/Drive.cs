@@ -64,7 +64,7 @@ public class Drive : MonoBehaviour
         brakeLight.SetActive(false);
     }
 
-    void CalculateEngineSound()
+    public void CalculateEngineSound()
     {
         float gearPercentage = 1 / (float) numGears;
         float targetGearFactor = Mathf.InverseLerp(gearPercentage * currentGear, gearPercentage * (currentGear + 1), Mathf.Abs(currentSpeed/maxSpeed));
@@ -89,20 +89,8 @@ public class Drive : MonoBehaviour
         highAccel.pitch = Mathf.Min(highPitch, pitch) * 0.25f;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        float a = Input.GetAxis("Vertical");
-        float s = Input.GetAxis("Horizontal");
-        float b = Input.GetAxis("Jump");
-        Go(a, s, b);
 
-        CheckForSkid();
-
-        CalculateEngineSound();
-    }
-
-    void Go(float accel, float steer, float brake) 
+    public void Go(float accel, float steer, float brake) 
     {
         accel = Mathf.Clamp(accel, -1, 1);
         steer = Mathf.Clamp(steer, -1, 1) * maxSteerAngle;
@@ -130,7 +118,7 @@ public class Drive : MonoBehaviour
         }
     }
 
-    void CheckForSkid ()
+    public void CheckForSkid ()
     {
         int numSkidding = 0;
         for (int i = 0; i < 4; i++) 
