@@ -22,14 +22,14 @@ class AIController : MonoBehaviour
         float targetAngle = Mathf.Atan2(localTarget.x, localTarget.z) * Mathf.Rad2Deg; // Mathf.Rad2Deg convert to deg
 
         float steer = Mathf.Clamp(targetAngle * steetingSensitivity, -1, 1) * Mathf.Abs(drive.currentSpeed);
-        float accel = 0.5f;
+        float accel = 1f;
         float brake = 0;
 
-        if (distanceToTarget < 5)
+        /*if (distanceToTarget < 5)
         {
             brake = 0.8f;
             accel = 0.1f; 
-        }
+        }*/
 
         drive.Go(accel, steer, brake);
 
